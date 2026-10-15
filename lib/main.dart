@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           update: (_, repository, __) => GenerateImageUseCase(repository),
         ),
         ChangeNotifierProvider<AiViewModel>(
-          create: (context) => AiViewModel(context.read<GenerateImageUseCase>()),
+          create: (context) => AiViewModel(context.read<AiRepositoryImpl>()),
         ),
       ],
       child: MaterialApp(
