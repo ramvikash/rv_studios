@@ -20,7 +20,7 @@ class _AiHomeViewState extends State<AiHomeView> {
     final viewModel = Provider.of<AiViewModel>(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('HF Local AI Generator (MVVM)')),
+      appBar: AppBar(title: const Text('RV Studio v1.0')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         compression: false,
