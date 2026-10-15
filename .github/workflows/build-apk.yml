@@ -44,6 +44,79 @@ jobs:
       - name: Upgrade / Regenerate Android Project Files
         run: flutter create . --platforms=android --org com.rvstudio
 
+        name: Build Flutter APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Fix pubspec.yaml package name
+        run: |
+          python3 -c "
+          with open('pubspec.yaml', 'r') as f:
+              lines = f.readlines()
+          with open('pubspec.yaml', 'w') as f:
+              f.write('name: rv_studio\n')
+              for line in lines:
+                  if not line.startswith('name:'):
+                      f.write(line)
+          "
+
+      - name: Upgrade / Regenerate Android Project Files
+        run: flutter create . --platforms=android --org com.rvstudio
+
+      - name: Add Internet Permission to AndroidManifest
+        run: |
+          python3 -c "
+          path = 'android/app/src/main/AndroidManifest.xml'
+          with open(path, 'r') as f:
+              lines = f.readlines()
+          new_lines = []
+          added = False
+          for line in lines:
+              new_lines.append(line)
+              if '<manifest' in line and not added:
+                  new_lines.append('    <uses-permission android:name=\"android.permission.INTERNET\" />\n')
+                  added = True
+          with open(path, 'w') as f:
+              f.writelines(new_lines)
+          "
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Release APK
+        run: flutter build apk --release
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rv-studio-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
       - name: Install dependencies
         run: flutter pub get
 
