@@ -27,10 +27,20 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Ensure valid pubspec package name
+      - name: Fix pubspec.yaml package name
         run: |
-          # Overwrite package name line in pubspec.yaml to guarantee it's valid
-          sed -i 's/^name:.*/name: rv_studio/' pubspec.yaml
+          echo "Overwriting package name in pubspec.yaml"
+          # Create a clean valid pubspec header
+          python3 -c "
+          with open('pubspec.yaml', 'r') as f:
+              lines = f.readlines()
+          with open('pubspec.yaml', 'w') as f:
+              f.write('name: rv_studio\n')
+              for line in lines:
+                  if not line.startswith('name:'):
+                      f.write(line)
+          "
+          cat pubspec.yaml | head -n 5
 
       - name: Upgrade / Regenerate Android Project Files
         run: flutter create . --platforms=android --org com.rvstudio
