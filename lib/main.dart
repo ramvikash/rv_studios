@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'HF Local AI App',
+        title: 'RV Studio V1.0',
         theme: ThemeData(primarySwatch: Colors.deepPurple),
         home: const AiHomeView(),
         debugShowCheckedModeBanner: false,
