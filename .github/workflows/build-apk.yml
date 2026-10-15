@@ -27,6 +27,11 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Ensure valid pubspec package name
+        run: |
+          # Overwrite package name line in pubspec.yaml to guarantee it's valid
+          sed -i 's/^name:.*/name: rv_studio/' pubspec.yaml
+
       - name: Upgrade / Regenerate Android Project Files
         run: flutter create . --platforms=android --org com.rvstudio
 
