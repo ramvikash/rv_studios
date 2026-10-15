@@ -33,9 +33,9 @@ class _AiHomeViewState extends State<AiHomeView> {
                   ? null
                   : () {
                       viewModel.downloadModel(
-                        "https://huggingface.co/Llama-3-Instruct-Model-Weights-Sample/resolve/main/model.tflite",
+                        https://huggingface.co/mit-han-lab/MobileDiffusion-T2I/resolve/main/model.tflite",
                         "model.tflite",
-                        "stable_diffusion_tiny",
+                        "mobile_diffusion",
                       );
                     },
               child: const Text('Download & Store Model Locally'),
