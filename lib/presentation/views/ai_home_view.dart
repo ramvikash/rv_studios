@@ -71,7 +71,16 @@ class _AiHomeViewState extends State<AiHomeView> {
               child: const Text('Pick Image & Run Image-to-Image'),
             ),
             const SizedBox(height: 24),
-            if (viewModel.isLoading) const Center(child: CircularProgressIndicator()),
+            // if (viewModel.isLoading) const Center(child: CircularProgressIndicator()),
+
+            // Inside your download button section of AiHomeView:
+            if (viewModel.isLoading) ...[
+            const SizedBox(height: 16),
+            LinearProgressIndicator(value: viewModel.downloadProgress),
+            const SizedBox(height: 8),
+            Text(
+                "${(viewModel.downloadProgress * 100).toStringAsFixed(1)}% downloaded", textAlign: TextAlign.center,),
+            ],
             if (viewModel.resultOutput != null) ...[
               const Text('Result Output / Path:', style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
