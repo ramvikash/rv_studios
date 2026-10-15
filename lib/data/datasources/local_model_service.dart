@@ -30,22 +30,24 @@ class LocalModelService {
     }
 
     try {
-      // Request download with range headers to support resuming if partially downloaded
+      final Map<String, dynamic> headers = {};
+      if (existingFileSize > 0) {
+        headers['Range'] = 'bytes=$existingFileSize-';
+      }
+
       Options options = Options(
-        headers: existingFileSize > 0 ? {'Range': 'bytes=$existingFileSize-'} : {},
+        headers: headers,
         responseType: ResponseType.stream,
+        followRedirects: true,
       );
 
       final response = await _dio.get<ResponseBody>(url, options: options);
       
-      // Handle server content length properly
       final totalHeader = response.headers.value(Headers.contentLengthHeader);
       final int serverFileSize = totalHeader != null ? int.parse(totalHeader) : 0;
       final int totalFilesize = serverFileSize + existingFileSize;
 
-      // Open file in write-append mode if resuming, else write mode
       final IOSink sink = file.openWrite(mode: existingFileSize > 0 ? FileMode.append : FileMode.write);
-      
       int downloaded = existingFileSize;
 
       await response.data?.stream.forEach((chunk) {
