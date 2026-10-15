@@ -20,10 +20,9 @@ class _AiHomeViewState extends State<AiHomeView> {
     final viewModel = Provider.of<AiViewModel>(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('RV Studio v1.0')),
+      appBar: AppBar(title: const Text('rv studio v 1.0')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        compression: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -33,7 +32,6 @@ class _AiHomeViewState extends State<AiHomeView> {
               onPressed: viewModel.isLoading
                   ? null
                   : () {
-                      // Example Hugging Face file URL (Replace with your target ONNX/TFLite model file URL)
                       viewModel.downloadModel(
                         "https://huggingface.co/Llama-3-Instruct-Model-Weights-Sample/resolve/main/model.tflite",
                         "model.tflite",
@@ -42,6 +40,15 @@ class _AiHomeViewState extends State<AiHomeView> {
                     },
               child: const Text('Download & Store Model Locally'),
             ),
+            if (viewModel.isLoading) ...[
+              const SizedBox(height: 16),
+              LinearProgressIndicator(value: viewModel.downloadProgress),
+              const SizedBox(height: 8),
+              Text(
+                "${(viewModel.downloadProgress * 100).toStringAsFixed(1)}% downloaded",
+                textAlign: TextAlign.center,
+              ),
+            ],
             const Divider(height: 32),
             TextField(
               controller: _promptController,
@@ -71,16 +78,6 @@ class _AiHomeViewState extends State<AiHomeView> {
               child: const Text('Pick Image & Run Image-to-Image'),
             ),
             const SizedBox(height: 24),
-            // if (viewModel.isLoading) const Center(child: CircularProgressIndicator()),
-
-            // Inside your download button section of AiHomeView:
-            if (viewModel.isLoading) ...[
-            const SizedBox(height: 16),
-            LinearProgressIndicator(value: viewModel.downloadProgress),
-            const SizedBox(height: 8),
-            Text(
-                "${(viewModel.downloadProgress * 100).toStringAsFixed(1)}% downloaded", textAlign: TextAlign.center,),
-            ],
             if (viewModel.resultOutput != null) ...[
               const Text('Result Output / Path:', style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
