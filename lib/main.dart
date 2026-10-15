@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'RV Studio v1.0',
+        title: 'rv studio v 1.0',
         theme: ThemeData(primarySwatch: Colors.deepPurple),
         home: const AiHomeView(),
         debugShowCheckedModeBanner: false,
