@@ -30,15 +30,15 @@ class _AiHomeViewState extends State<AiHomeView> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: viewModel.isLoading
-                  ? null
-                  : () {
-                      viewModel.downloadModel(
-                        "https://huggingface.co/mit-han-lab/MobileDiffusion-T2I/resolve/main/model.tflite",
-                        "model.tflite",
-                        "mobile_diffusion",
-                      );
-                    },
-              child: const Text('Download & Store Model Locally'),
+              ? null
+              : () {
+                viewModel.downloadModel(
+                  "https://huggingface.co/mit-han-lab/MobileDiffusion-T2I/raw/main/model.onnx",
+                  "model.onnx",
+                  "mobile_diffusion",
+                );
+              },
+              child: const Text('Download MobileDiffusion (Option 1)'),
             ),
             if (viewModel.isLoading) ...[
               const SizedBox(height: 16),
