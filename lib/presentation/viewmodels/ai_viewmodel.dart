@@ -43,7 +43,50 @@ class AiViewModel extends ChangeNotifier {
     }
   }
 
-  // Keep existing text-to-image and image-to-image methods...
+  Future<void> runTextToImage(String prompt) async {
+    if (localModelPath == null) {
+      statusMessage = "Please download/load model locally first!";
+      notifyListeners();
+      return;
+    }
+
+    isLoading = true;
+    statusMessage = "Running Text-to-Image locally...";
+    notifyListeners();
+
+    try {
+      resultOutput = await _repository.generateTextToImage(prompt, localModelPath!);
+      statusMessage = "Text-to-Image generation complete!";
+    } catch (e) {
+      statusMessage = "Error during generation: $e";
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> runImageToImage(File image, String prompt) async {
+    if (localModelPath == null) {
+      statusMessage = "Please download/load model locally first!";
+      notifyListeners();
+      return;
+    }
+
+    isLoading = true;
+    statusMessage = "Running Image-to-Image locally...";
+    notifyListeners();
+
+    try {
+      resultOutput = await _repository.generateImageToImage(image, prompt, localModelPath!);
+      statusMessage = "Image-to-Image processing complete!";
+    } catch (e) {
+      statusMessage = "Error: $e";
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
   void setSelectedImage(File image) {
     selectedSourceImage = image;
     notifyListeners();
